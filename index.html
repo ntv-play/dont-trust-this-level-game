@@ -1,0 +1,874 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Don't Trust This Level · NTV Play</title>
+    <meta name="description" content="A 20-level troll platformer. Every level looks easy, and every level hides a trap. Die, laugh, remember, retry. Free on Android." />
+    <meta name="theme-color" content="#7cc8ff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Don't Trust This Level" />
+    <meta property="og:description" content="Every level lies. Just a little. A free troll platformer by NTV Play." />
+    <!-- Mạng xã hội cần link ảnh đầy đủ: đổi thành https://<tên-miền>/img/en-menu.jpg khi đã có tên miền. -->
+    <meta property="og:image" content="img/en-menu.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;display=swap&amp;subset=vietnamese" rel="stylesheet" />
+    <style>
+      /* Màu và kích thước theo STYLE-GUIDE.md của game ("Kẹo Hoạt Hình"). */
+      :root {
+        --ink: #3a2e39;
+        --ink-soft: #6b5f6e;
+        --green: #58cc02;
+        --green-lip: #46a302;
+        --green-txt: #2f7a00;
+        --blue: #1cb0f6;
+        --blue-lip: #1899d6;
+        --blue-txt: #0f6f9e;
+        --orange: #ff9600;
+        --orange-lip: #e08600;
+        --orange-txt: #a85f00;
+        --red: #ff4b4b;
+        --star: #ffc800;
+        --card: #ffffff;
+        --card-lip: #d8d4e6;
+        --panel: #fffaf0;
+        --locked: #e5e2ee;
+        --locked-lip: #c9c4d9;
+        --locked-txt: #a9a3b8;
+        --shade: rgba(30, 26, 43, 0.2);
+        --sign: #2ec4b6;
+        --sky-top: #7cc8ff;
+        --sky-bottom: #d9f2ff;
+        --dirt: #c97b4a;
+        --dirt-dark: #9c5a33;
+        --dirt-dot: #e7a26f;
+        --grass: #6bcb3c;
+        --grass-light: #9be15d;
+        --grass-dark: #3e9b2a;
+        --font: 'Baloo 2', 'Segoe UI', Roboto, Arial, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--dirt-dark);
+        color: var(--ink);
+        font: 600 18px/1.5 var(--font);
+        overflow-x: hidden;
+      }
+      a { color: inherit; }
+      img { max-width: 100%; display: block; }
+
+      /* Chữ tiêu đề kiểu game: trắng, viền mận dày cỡ/6,5, bóng đổ cứng cỡ/12. */
+      .title-text {
+        color: #fff;
+        font-weight: 800;
+        -webkit-text-stroke: 0.154em var(--ink);
+        paint-order: stroke fill;
+        filter: drop-shadow(0 0.083em 0 var(--ink));
+        letter-spacing: 0.01em;
+      }
+
+      /* Nút "viên kẹo": thân màu, gờ đậm hơn, bóng mờ, vệt sáng 30% trên cùng; bấm thì lún xuống. */
+      .btn {
+        --c: var(--green);
+        --lip: var(--green-lip);
+        --txt: var(--green-txt);
+        --lip-h: 8px;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        min-height: 72px;
+        padding: 12px 28px 8px;
+        border: 0;
+        border-radius: 22px;
+        background: var(--c);
+        box-shadow: 0 var(--lip-h) 0 var(--lip), 0 calc(var(--lip-h) + 6px) 0 var(--shade);
+        color: #fff;
+        font: 800 26px/1.1 var(--font);
+        text-decoration: none;
+        -webkit-text-stroke: 6px var(--txt);
+        paint-order: stroke fill;
+        cursor: pointer;
+        transition: transform 0.08s, box-shadow 0.08s;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+      .btn::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 5px;
+        height: 30%;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.2);
+        pointer-events: none;
+      }
+      .btn:active:not([aria-disabled='true']) {
+        transform: translateY(calc(var(--lip-h) - 2px));
+        box-shadow: 0 2px 0 var(--lip), 0 8px 0 var(--shade);
+      }
+      .btn:focus-visible { outline: 4px solid var(--star); outline-offset: 6px; }
+      .btn svg { flex: none; width: 1.05em; height: 1.05em; }
+      .btn small { display: block; font-size: 0.55em; -webkit-text-stroke-width: 4px; }
+      .btn.blue { --c: var(--blue); --lip: var(--blue-lip); --txt: var(--blue-txt); }
+      .btn.orange { --c: var(--orange); --lip: var(--orange-lip); --txt: var(--orange-txt); }
+      .btn.white {
+        --c: var(--card);
+        --lip: var(--card-lip);
+        color: var(--ink);
+        -webkit-text-stroke: 0;
+        border: 3px solid var(--card-lip);
+      }
+      .btn.white::before { display: none; }
+      .btn.locked {
+        --c: var(--locked);
+        --lip: var(--locked-lip);
+        color: var(--locked-txt);
+        -webkit-text-stroke: 0;
+        cursor: default;
+      }
+      .btn.locked::before { display: none; }
+      .btn.small { min-height: 60px; padding: 8px 18px 4px; font-size: 22px; border-radius: 18px; --lip-h: 6px; }
+      .pulse { animation: pulse 0.7s ease-in-out infinite alternate; }
+      @keyframes pulse { to { scale: 1.04; } }
+
+      /* ---------- Phần đầu: trời, đồi, đất ---------- */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(var(--sky-top), var(--sky-bottom) 88%);
+        padding: max(16px, env(safe-area-inset-top)) 16px 0;
+      }
+      .topbar {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        max-width: 1160px;
+        margin: 0 auto;
+      }
+      .studio {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: 58px;
+        padding: 0 20px 0 8px;
+        border: 3px solid var(--card-lip);
+        border-radius: 29px;
+        background: var(--card);
+        box-shadow: 2px 6px 0 var(--shade);
+        font-weight: 800;
+        font-size: 22px;
+        text-decoration: none;
+      }
+      .studio img { width: 44px; height: 44px; }
+      .sun {
+        position: absolute;
+        right: 9%;
+        top: 70px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #fff1a8;
+        box-shadow: 0 0 0 26px rgba(255, 241, 168, 0.35), 0 0 0 54px rgba(255, 241, 168, 0.18);
+      }
+      .cloud {
+        position: absolute;
+        width: 220px;
+        left: 0;
+        animation: drift linear infinite;
+        pointer-events: none;
+      }
+      @keyframes drift {
+        from { transform: translateX(-260px); }
+        to { transform: translateX(calc(100vw + 40px)); }
+      }
+      .hero-copy {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 28px auto 0;
+        text-align: center;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(44px, 9vw, 104px);
+        line-height: 1.05;
+        animation: wobble 1.6s ease-in-out infinite alternate;
+      }
+      .hero h1 span { display: inline-block; animation: breathe 0.8s ease-in-out infinite alternate; }
+      @keyframes wobble { from { rotate: -1.6deg; } to { rotate: 1.6deg; } }
+      @keyframes breathe { to { scale: 1.035; } }
+      .subtitle {
+        margin: 18px 0 0;
+        font-size: clamp(22px, 3vw, 32px);
+        font-weight: 700;
+        color: #fff;
+        -webkit-text-stroke: 5px var(--ink);
+        paint-order: stroke fill;
+        letter-spacing: 0.04em;
+      }
+      .pitch {
+        max-width: 640px;
+        margin: 18px auto 0;
+        padding: 12px 22px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.86);
+        font-size: 19px;
+      }
+      .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 22px 18px;
+        justify-content: center;
+        margin-top: 30px;
+      }
+      .cta .btn { min-width: min(360px, 100%); }
+
+      /* Cảnh menu của game: đồi, dải đất, hạt đậu, tấm biển, cửa biết chạy trốn. */
+      .scene {
+        position: relative;
+        height: clamp(230px, 30vw, 330px);
+        margin: 18px -16px 0;
+      }
+      .hills { position: absolute; left: 0; bottom: 70px; width: 100%; height: 76%; }
+      .ground {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 78px;
+        border-top: 4px solid var(--ink);
+        background:
+          linear-gradient(var(--grass-light) 0 4px, var(--grass) 4px 18px, var(--grass-dark) 18px 22px, transparent 22px),
+          radial-gradient(var(--dirt-dot) 2.5px, transparent 3px) 0 30px / 46px 30px,
+          var(--dirt);
+      }
+      .bean {
+        position: absolute;
+        left: 9%;
+        bottom: 74px;
+        width: clamp(78px, 9vw, 120px);
+        transform-origin: 50% 100%;
+        animation: idle 1.05s ease-in-out infinite alternate;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+        background: none;
+      }
+      .bean.hop { animation: hop 0.6s cubic-bezier(0.3, 0.7, 0.4, 1); }
+      @keyframes idle { to { transform: scale(1.03, 0.97); } }
+      @keyframes hop {
+        0% { transform: scale(1.12, 0.84); }
+        30% { transform: translateY(-90px) scale(0.9, 1.14); }
+        70% { transform: translateY(-40px); }
+        100% { transform: none; }
+      }
+      .narrator {
+        position: absolute;
+        left: 27%;
+        bottom: 74px;
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      .narrator svg { flex: none; width: clamp(54px, 6vw, 76px); }
+      .bubble {
+        position: relative;
+        margin-bottom: clamp(60px, 7vw, 92px);
+        max-width: min(340px, 48vw);
+        min-height: 56px;
+        padding: 10px 18px 8px;
+        border: 4px solid var(--ink);
+        border-radius: 26px;
+        background: #fff;
+        box-shadow: 3px 8px 0 var(--shade);
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 1.25;
+      }
+      .bubble::after {
+        content: '';
+        position: absolute;
+        left: -14px;
+        bottom: 12px;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-left: 4px solid var(--ink);
+        border-bottom: 4px solid var(--ink);
+        transform: rotate(45deg) skew(10deg, 10deg);
+      }
+      .door-wrap {
+        position: absolute;
+        right: 9%;
+        bottom: 74px;
+        width: clamp(70px, 8vw, 104px);
+      }
+      .door { width: 100%; cursor: pointer; border: 0; padding: 0; background: none; display: block; }
+      .door-wrap.dodge { animation: dodge 1.3s cubic-bezier(0.3, 0.8, 0.3, 1); }
+      @keyframes dodge {
+        0% { transform: none; }
+        20%, 75% { transform: translateX(150%); }
+        100% { transform: none; }
+      }
+      .arrow {
+        position: absolute;
+        left: 50%;
+        top: -54px;
+        width: 34px;
+        margin-left: -17px;
+        animation: bob 0.6s ease-in-out infinite alternate;
+      }
+      @keyframes bob { to { transform: translateY(-9px); } }
+
+      /* ---------- Phần dưới: lòng đất ---------- */
+      .underground {
+        position: relative;
+        padding: 56px 16px 0;
+        background:
+          radial-gradient(var(--dirt-dot) 2.5px, transparent 3px) 0 0 / 46px 38px,
+          radial-gradient(rgba(58, 46, 57, 0.18) 2px, transparent 2.5px) 22px 18px / 62px 50px,
+          linear-gradient(var(--dirt), #b56c43 40%, var(--dirt-dark));
+      }
+      .wrap { max-width: 1160px; margin: 0 auto; }
+      section + section { margin-top: 72px; }
+      h2 {
+        margin: 0 0 30px;
+        text-align: center;
+        font-size: clamp(34px, 5vw, 54px);
+        line-height: 1.1;
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 26px;
+      }
+      .card {
+        position: relative;
+        padding: 26px 24px 22px;
+        border-radius: 28px;
+        background: var(--panel);
+        box-shadow: 0 10px 0 var(--card-lip), 4px 18px 0 var(--shade);
+      }
+      .badge {
+        display: grid;
+        place-items: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 4px solid var(--ink);
+        margin-bottom: 12px;
+      }
+      .badge svg { width: 34px; height: 34px; }
+      .card h3 { margin: 0 0 6px; font-size: 26px; line-height: 1.15; font-weight: 800; }
+      .card p { margin: 0; color: var(--ink-soft); font-size: 18px; }
+
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 34px 28px;
+      }
+      .shot { margin: 0; }
+      .shot a {
+        display: block;
+        overflow: hidden;
+        border: 4px solid var(--ink);
+        border-radius: 22px;
+        box-shadow: 0 8px 0 rgba(58, 46, 57, 0.55);
+        background: var(--sky-bottom);
+        aspect-ratio: 20 / 9;
+      }
+      .shot img { width: 100%; height: 100%; object-fit: cover; }
+      .shot figcaption {
+        display: inline-block;
+        margin: 16px 0 0 14px;
+        padding: 6px 18px 4px;
+        border: 3px solid var(--card-lip);
+        border-radius: 999px;
+        background: var(--card);
+        font-weight: 800;
+        font-size: 19px;
+      }
+
+      .traps { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 0; padding: 0; list-style: none; }
+      .traps li {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 20px 4px 8px;
+        border: 3px solid var(--card-lip);
+        border-radius: 999px;
+        background: var(--card);
+        box-shadow: 2px 6px 0 var(--shade);
+        font-weight: 800;
+        font-size: 20px;
+      }
+      .traps li::before {
+        content: '!';
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+        font-size: 22px;
+        line-height: 1;
+        padding-top: 3px;
+      }
+      .traps li:nth-child(3n + 2)::before { background: var(--orange); }
+
+      /* Bảng cuối giống bảng "Qua màn!" trong game: thẻ trắng ngà, dải tiêu đề xanh đè lên mép trên. */
+      .final {
+        position: relative;
+        max-width: 760px;
+        margin: 110px auto 0;
+        padding: 74px 24px 40px;
+        border-radius: 32px;
+        background: var(--panel);
+        box-shadow: 0 10px 0 var(--card-lip), 4px 24px 0 rgba(30, 26, 43, 0.25);
+        text-align: center;
+      }
+      .ribbon {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, -50%);
+        width: min(520px, 92%);
+        padding: 16px 20px 12px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 8px 0 var(--green-lip);
+        font-size: clamp(28px, 4.4vw, 44px);
+        line-height: 1.1;
+      }
+      .ribbon::before {
+        content: '';
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        top: 6px;
+        height: 30%;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .stars { display: flex; justify-content: center; align-items: flex-end; gap: 14px; margin-bottom: 20px; }
+      .stars svg { width: 54px; }
+      .stars svg:nth-child(2) { width: 70px; margin-bottom: 10px; }
+      .final p { margin: 0 auto 26px; max-width: 520px; color: var(--ink-soft); font-size: 20px; }
+
+      footer {
+        margin-top: 96px;
+        padding: 0 0 max(28px, env(safe-area-inset-bottom));
+        text-align: center;
+      }
+      .foot-pill {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 6px 18px;
+        padding: 10px 26px 8px;
+        border: 3px solid var(--card-lip);
+        border-radius: 28px;
+        background: var(--card);
+        box-shadow: 2px 6px 0 var(--shade);
+        font-size: 17px;
+        font-weight: 700;
+      }
+      .foot-pill a { color: var(--blue-txt); }
+
+      @media (max-width: 720px) {
+        body { font-size: 17px; }
+        .studio { height: 52px; font-size: 19px; padding-right: 16px; }
+        .studio img { width: 38px; height: 38px; }
+        .sun { width: 80px; height: 80px; top: 86px; right: 4%; }
+        .cta .btn { width: 100%; }
+        .btn { font-size: 21px; min-height: 66px; padding-left: 18px; padding-right: 18px; }
+        .subtitle { -webkit-text-stroke-width: 4px; line-height: 1.35; }
+        .final { padding-left: 16px; padding-right: 16px; }
+        .final .btn { font-size: 19px; padding-left: 12px; padding-right: 12px; gap: 8px; }
+        .shots { grid-template-columns: 1fr; }
+        .narrator { left: 30%; }
+        .bubble { font-size: 16px; max-width: 46vw; padding: 8px 12px 6px; border-width: 3px; }
+        .door-wrap { right: 6%; }
+        .bean { left: 5%; }
+      }
+      @media (max-width: 420px) {
+        .narrator svg { display: none; }
+        .narrator { left: 28%; }
+        .bubble::after { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="sun" aria-hidden="true"></div>
+      <svg class="cloud" style="top: 90px; animation-duration: 70s; animation-delay: -12s" viewBox="0 0 220 90" aria-hidden="true"><path fill="#fff" d="M40 80h140a34 34 0 0 0 0-68 46 46 0 0 0-86-4 34 34 0 0 0-54 26A24 24 0 0 0 40 80z" /></svg>
+      <svg class="cloud" style="top: 210px; width: 160px; animation-duration: 95s; animation-delay: -60s; opacity: 0.95" viewBox="0 0 220 90" aria-hidden="true"><path fill="#fff" d="M40 80h140a34 34 0 0 0 0-68 46 46 0 0 0-86-4 34 34 0 0 0-54 26A24 24 0 0 0 40 80z" /></svg>
+      <svg class="cloud" style="top: 40px; width: 180px; animation-duration: 85s; animation-delay: -38s" viewBox="0 0 220 90" aria-hidden="true"><path fill="#fff" d="M40 80h140a34 34 0 0 0 0-68 46 46 0 0 0-86-4 34 34 0 0 0-54 26A24 24 0 0 0 40 80z" /></svg>
+
+      <header class="topbar">
+        <a class="studio" href="./"><img src="img/logo.svg" alt="" width="44" height="44" />NTV Play</a>
+        <button class="btn blue small" id="lang" type="button" aria-label="Tiếng Việt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4.3" ry="9" /><path d="M3 12h18" /></svg>
+          <span id="lang-label">VI</span>
+        </button>
+      </header>
+
+      <main class="hero-copy">
+        <h1 class="title-text"><span data-i18n="title">DON'T TRUST THIS LEVEL</span></h1>
+        <p class="subtitle" data-i18n="subtitle">Every level lies. Just a little.</p>
+        <p class="pitch" data-i18n="pitch">A 20-level troll platformer. Every level looks easy, and every level hides a trap. Die, laugh, remember, retry.</p>
+        <div class="cta">
+          <a class="btn locked" data-store aria-disabled="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 3h16v4H4zm0 6h16v12H4z" opacity=".9" /></svg>
+            <span data-i18n="storeSoon">Coming soon to Google Play</span>
+          </a>
+        </div>
+      </main>
+
+      <div class="scene">
+        <svg class="hills" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+          <path fill="#c9ebbd" d="M80 260 260 70 440 260zM820 260 1010 50 1200 260z" />
+          <path fill="#fff" d="M260 70 220 112h80zM1010 50 968 96h84z" />
+          <ellipse cx="200" cy="250" rx="380" ry="120" fill="#b6e3a3" />
+          <ellipse cx="760" cy="262" rx="460" ry="118" fill="#b6e3a3" />
+          <ellipse cx="1340" cy="250" rx="380" ry="130" fill="#b6e3a3" />
+          <ellipse cx="460" cy="290" rx="420" ry="110" fill="#8fd17a" />
+          <ellipse cx="1120" cy="295" rx="460" ry="112" fill="#8fd17a" />
+          <circle cx="620" cy="196" r="34" fill="#7cc46a" />
+          <circle cx="1290" cy="186" r="30" fill="#7cc46a" />
+        </svg>
+        <div class="ground" aria-hidden="true"></div>
+
+        <button class="bean" type="button" aria-label="Jump" data-i18n-label="beanLabel">
+          <img src="img/logo.svg" alt="" />
+        </button>
+
+        <div class="narrator" aria-live="polite">
+          <svg viewBox="0 0 70 96" aria-hidden="true">
+            <rect x="31" y="56" width="8" height="40" fill="#8a4b1f" stroke="#3a2e39" stroke-width="3.5" />
+            <rect x="5" y="4" width="60" height="60" rx="14" fill="#2ec4b6" stroke="#3a2e39" stroke-width="3.5" />
+            <path d="M15 26h14M41 26h14" stroke="#3a2e39" stroke-width="4" stroke-linecap="round" />
+            <path d="M40 15l15-4" stroke="#3a2e39" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M22 44q14 8 28-4" fill="#fff" stroke="#3a2e39" stroke-width="3.5" stroke-linecap="round" />
+          </svg>
+          <p class="bubble" id="bubble">This level is easy. Trust me.</p>
+        </div>
+
+        <div class="door-wrap" id="door-wrap">
+          <svg class="arrow" viewBox="0 0 34 40" aria-hidden="true"><path d="M10 2h14v18h8L17 38 2 20h8z" fill="#ffd23f" stroke="#3a2e39" stroke-width="3" stroke-linejoin="round" /></svg>
+          <button class="door" id="door" type="button" aria-label="Exit door" data-i18n-label="doorLabel">
+            <svg viewBox="0 0 80 112" aria-hidden="true">
+              <ellipse cx="40" cy="62" rx="40" ry="50" fill="#fff3a0" opacity=".55" />
+              <path d="M8 110V44a32 32 0 0 1 64 0v66z" fill="#c47a3a" stroke="#3a2e39" stroke-width="4" stroke-linejoin="round" />
+              <path d="M30 18v92M50 18v92" stroke="#8a4b1f" stroke-width="3" />
+              <circle cx="60" cy="72" r="5" fill="#ffd23f" stroke="#3a2e39" stroke-width="2.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="underground">
+      <div class="wrap">
+        <section>
+          <h2 class="title-text" data-i18n="featuresTitle">Looks easy. Isn't.</h2>
+          <div class="features">
+            <article class="card">
+              <div class="badge" style="background: var(--red)">
+                <svg viewBox="0 0 34 34" aria-hidden="true"><path fill="#fff" d="M2 30 9 10l7 20zM13 30l8-24 8 24zM24 30l4-12 4 12z" /></svg>
+              </div>
+              <h3 data-i18n="f1Title">20 levels, 10 kinds of traps</h3>
+              <p data-i18n="f1Text">Crumbling floors, popping spikes, falling ceilings, doors that bite. Every level looks harmless.</p>
+            </article>
+            <article class="card">
+              <div class="badge" style="background: var(--orange)">
+                <svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" aria-hidden="true"><path d="M27 17a10 10 0 1 1-4-8" /><path fill="#fff" stroke-width="0" d="M20 3h10v10z" /></svg>
+              </div>
+              <h3 data-i18n="f2Title">Watch every death again</h3>
+              <p data-i18n="f2Text">Each death replays in slow motion, in grayscale, with a mocking laugh. It hurts. It's funny.</p>
+            </article>
+            <article class="card">
+              <div class="badge" style="background: var(--sign)">
+                <svg viewBox="0 0 34 34" aria-hidden="true"><path fill="#fff" d="M4 6h26a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H14l-7 6v-6H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" /><circle cx="10" cy="15.5" r="2.4" fill="#2ec4b6" /><circle cx="17" cy="15.5" r="2.4" fill="#2ec4b6" /><circle cx="24" cy="15.5" r="2.4" fill="#2ec4b6" /></svg>
+              </div>
+              <h3 data-i18n="f3Title">A narrator with opinions</h3>
+              <p data-i18n="f3Text">A teal sign talks to you when you start, when you die, when you win. It lies.</p>
+            </article>
+            <article class="card">
+              <div class="badge" style="background: var(--green)">
+                <svg viewBox="0 0 34 34" aria-hidden="true"><path fill="#fff" d="M3 17 13 8v18zM31 17 21 8v18z" /><circle cx="17" cy="17" r="3.4" fill="#fff" /></svg>
+              </div>
+              <h3 data-i18n="f4Title">Free, three buttons</h3>
+              <p data-i18n="f4Text">Left, right, jump. Each level takes under a minute. Unless you die. You will.</p>
+            </article>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="title-text" data-i18n="shotsTitle">Screenshots</h2>
+          <div class="shots">
+            <figure class="shot">
+              <a href="img/en-menu.jpg" data-shot-link="menu" target="_blank" rel="noopener"><img src="img/en-menu.jpg" data-shot="menu" alt="Level select menu with stars" data-i18n-alt="menuAlt" width="1200" height="540" loading="lazy" /></a>
+              <figcaption data-i18n="menuCap">Pick a level, collect stars</figcaption>
+            </figure>
+            <figure class="shot">
+              <a href="img/en-trap.jpg" data-shot-link="trap" target="_blank" rel="noopener"><img src="img/en-trap.jpg" data-shot="trap" alt="An angry stone block about to fall" data-i18n-alt="trapAlt" width="1200" height="540" loading="lazy" /></a>
+              <figcaption data-i18n="trapCap">That block is… watching you</figcaption>
+            </figure>
+            <figure class="shot">
+              <a href="img/en-replay.jpg" data-shot-link="replay" target="_blank" rel="noopener"><img src="img/en-replay.jpg" data-shot="replay" alt="Slow-motion grayscale replay of a death at a fake door" data-i18n-alt="replayAlt" width="1200" height="540" loading="lazy" /></a>
+              <figcaption data-i18n="replayCap">The door was hungry</figcaption>
+            </figure>
+            <figure class="shot">
+              <a href="img/en-win.jpg" data-shot-link="win" target="_blank" rel="noopener"><img src="img/en-win.jpg" data-shot="win" alt="Level cleared panel with three stars" data-i18n-alt="winAlt" width="1200" height="540" loading="lazy" /></a>
+              <figcaption data-i18n="winCap">Cleared! This time.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section>
+          <h2 class="title-text" data-i18n="trapsTitle">Things you shouldn't trust</h2>
+          <ul class="traps" id="traps">
+            <li>The floor</li>
+            <li>Spikes (even fake ones)</li>
+            <li>The ceiling</li>
+            <li>The exit door</li>
+            <li>Springs</li>
+            <li>Your own controls</li>
+            <li>Invisible bricks</li>
+            <li>Saw blades</li>
+            <li>Gaps that look safe</li>
+            <li>The teal sign</li>
+          </ul>
+        </section>
+
+        <section class="final">
+          <div class="ribbon title-text" data-i18n="finalTitle">Ready to be fooled?</div>
+          <div class="stars" aria-hidden="true">
+            <svg viewBox="0 0 50 48"><path d="M25 2l6.8 14.6 16 1.9-11.8 11 3.1 15.8L25 37.4 10.9 45.3 14 29.5 2.2 18.5l16-1.9z" fill="#ffc800" stroke="#c98f00" stroke-width="3" stroke-linejoin="round" /></svg>
+            <svg viewBox="0 0 50 48"><path d="M25 2l6.8 14.6 16 1.9-11.8 11 3.1 15.8L25 37.4 10.9 45.3 14 29.5 2.2 18.5l16-1.9z" fill="#ffc800" stroke="#c98f00" stroke-width="3" stroke-linejoin="round" /></svg>
+            <svg viewBox="0 0 50 48"><path d="M25 2l6.8 14.6 16 1.9-11.8 11 3.1 15.8L25 37.4 10.9 45.3 14 29.5 2.2 18.5l16-1.9z" fill="#e0dcea" stroke="#c9c4d9" stroke-width="3" stroke-linejoin="round" /></svg>
+          </div>
+          <p data-i18n="finalText">Free. No account. Takes ten seconds to start, and a lot longer to finish.</p>
+          <div class="cta" style="margin-top: 0">
+            <a class="btn locked" data-store aria-disabled="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 3h16v4H4zm0 6h16v12H4z" opacity=".9" /></svg>
+              <span data-i18n="storeSoon">Coming soon to Google Play</span>
+            </a>
+          </div>
+        </section>
+
+        <footer>
+          <div class="foot-pill">
+            <span>© 2026 NTV Play</span>
+            <a href="privacy.html" data-i18n="privacy">Privacy policy</a>
+            <a href="" id="contact" hidden data-i18n="contact">Contact</a>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      // Cấu hình: đổi khi app đã lên Google Play, khi có email liên hệ.
+      const CONFIG = {
+        storeUrl: 'https://play.google.com/store/apps/details?id=com.ntvplay.donttrustthislevel',
+        storeLive: false,
+        email: '',
+      };
+
+      const T = {
+        en: {
+          pageTitle: "Don't Trust This Level · NTV Play",
+          description: 'A 20-level troll platformer. Every level looks easy, and every level hides a trap. Die, laugh, remember, retry. Free on Android.',
+          title: "DON'T TRUST THIS LEVEL",
+          subtitle: 'Every level lies. Just a little.',
+          pitch: 'A 20-level troll platformer. Every level looks easy, and every level hides a trap. Die, laugh, remember, retry.',
+          storeSoon: 'Coming soon to Google Play',
+          storeLive: 'Get it on Google Play',
+          bubble: ['This level is easy. Trust me.', 'The exit is right there. Really.', 'There are no traps here. None.', 'Go on. Touch the door.'],
+          beanLabel: 'Jump',
+          doorLabel: 'Exit door',
+          featuresTitle: "Looks easy. Isn't.",
+          f1Title: '20 levels, 10 kinds of traps',
+          f1Text: 'Crumbling floors, popping spikes, falling ceilings, doors that bite. Every level looks harmless.',
+          f2Title: 'Watch every death again',
+          f2Text: "Each death replays in slow motion, in grayscale, with a mocking laugh. It hurts. It's funny.",
+          f3Title: 'A narrator with opinions',
+          f3Text: 'A teal sign talks to you when you start, when you die, when you win. It lies.',
+          f4Title: 'Free, three buttons',
+          f4Text: 'Left, right, jump. Each level takes under a minute. Unless you die. You will.',
+          shotsTitle: 'Screenshots',
+          menuCap: 'Pick a level, collect stars',
+          trapCap: 'That block is… watching you',
+          replayCap: 'The door was hungry',
+          winCap: 'Cleared! This time.',
+          menuAlt: 'Level select menu with stars',
+          trapAlt: 'An angry stone block about to fall',
+          replayAlt: 'Slow-motion grayscale replay of a death at a fake door',
+          winAlt: 'Level cleared panel with three stars',
+          trapsTitle: "Things you shouldn't trust",
+          traps: ['The floor', 'Spikes (even fake ones)', 'The ceiling', 'The exit door', 'Springs', 'Your own controls', 'Invisible bricks', 'Saw blades', 'Gaps that look safe', 'The teal sign'],
+          finalTitle: 'Ready to be fooled?',
+          finalText: 'Free. No account. Takes ten seconds to start, and a lot longer to finish.',
+          privacy: 'Privacy policy',
+          contact: 'Contact',
+          otherLang: 'Tiếng Việt',
+        },
+        vi: {
+          pageTitle: 'Đừng Tin Màn Này · NTV Play',
+          description: 'Platformer troll 20 màn. Màn nào trông cũng dễ, và màn nào cũng giấu bẫy. Chết, cười, nhớ bẫy, thử lại. Miễn phí trên Android.',
+          title: 'ĐỪNG TIN MÀN NÀY',
+          subtitle: 'Màn nào cũng nói dối. Một chút thôi.',
+          pitch: 'Platformer troll 20 màn. Màn nào trông cũng dễ, và màn nào cũng giấu bẫy. Chết, cười, nhớ bẫy, thử lại.',
+          storeSoon: 'Sắp có trên Google Play',
+          storeLive: 'Tải trên Google Play',
+          bubble: ['Màn này dễ lắm. Tin tôi đi.', 'Cửa ra ngay đó. Thật mà.', 'Ở đây không có bẫy nào đâu.', 'Cứ chạm vào cửa đi.'],
+          beanLabel: 'Nhảy',
+          doorLabel: 'Cửa ra',
+          featuresTitle: 'Trông dễ. Không hề dễ.',
+          f1Title: '20 màn, 10 kiểu bẫy',
+          f1Text: 'Sàn sập, gai mọc lên, trần nhà rơi, cửa ra biết cắn. Màn nào cũng trông vô hại.',
+          f2Title: 'Xem lại cú chết',
+          f2Text: 'Mỗi lần chết được chiếu chậm, thế giới chuyển xám, kèm tiếng cười chế giễu. Đau mà buồn cười.',
+          f3Title: 'Người dẫn màn lắm mồm',
+          f3Text: 'Tấm biển xanh nói chuyện với bạn khi vào màn, khi chết, khi thắng. Nó nói dối.',
+          f4Title: 'Miễn phí, ba nút',
+          f4Text: 'Trái, phải, nhảy. Mỗi màn chưa tới một phút. Nếu bạn không chết. Mà bạn sẽ chết.',
+          shotsTitle: 'Ảnh trong game',
+          menuCap: 'Chọn màn, gom sao',
+          trapCap: 'Khối đá đó đang… nhìn bạn',
+          replayCap: 'Cửa đó đói lắm',
+          winCap: 'Qua màn! Lần này thôi.',
+          menuAlt: 'Menu chọn màn có sao',
+          trapAlt: 'Khối đá cáu kỉnh sắp rơi xuống',
+          replayAlt: 'Phát lại chậm màu xám cú chết ở cửa giả',
+          winAlt: 'Bảng qua màn với ba sao',
+          trapsTitle: 'Những thứ không nên tin',
+          traps: ['Sàn nhà', 'Gai (kể cả gai giả)', 'Trần nhà', 'Cửa ra', 'Lò xo', 'Chính nút điều khiển', 'Gạch tàng hình', 'Lưỡi cưa', 'Khoảng trống trông an toàn', 'Tấm biển xanh'],
+          finalTitle: 'Sẵn sàng bị lừa chưa?',
+          finalText: 'Miễn phí. Không cần tài khoản. Mười giây để bắt đầu, lâu hơn nhiều để chơi xong.',
+          privacy: 'Chính sách riêng tư',
+          contact: 'Liên hệ',
+          otherLang: 'English',
+        },
+      };
+
+      const store = {
+        get() { try { return localStorage.getItem('ntv.lang'); } catch { return null; } },
+        set(v) { try { localStorage.setItem('ntv.lang', v); } catch {} },
+      };
+      const fromUrl = new URLSearchParams(location.search).get('lang');
+      const pick = (v) => (v === 'vi' || v === 'en' ? v : null);
+      const browserLang = (navigator.languages || [navigator.language]).some((l) => /^vi\b/i.test(l || '')) ? 'vi' : 'en';
+      let lang = pick(fromUrl) || pick(store.get()) || browserLang;
+
+      const bubble = document.getElementById('bubble');
+      let line = 0;
+      let typing = 0;
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /** Chữ hiện dần như bóng nói trong game (không mờ dần). */
+      function say(text) {
+        clearInterval(typing);
+        if (reduced) { bubble.textContent = text; return; }
+        let n = 0;
+        bubble.textContent = '';
+        typing = setInterval(() => {
+          bubble.textContent = text.slice(0, ++n);
+          if (n >= text.length) clearInterval(typing);
+        }, 30);
+      }
+
+      function apply(next) {
+        lang = next;
+        const t = T[lang];
+        document.documentElement.lang = lang;
+        document.title = t.pageTitle;
+        document.querySelector('meta[name="description"]').content = t.description;
+        for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t[el.dataset.i18n];
+        for (const el of document.querySelectorAll('[data-i18n-alt]')) el.alt = t[el.dataset.i18nAlt];
+        for (const el of document.querySelectorAll('[data-i18n-label]')) el.setAttribute('aria-label', t[el.dataset.i18nLabel]);
+        for (const img of document.querySelectorAll('img[data-shot]')) img.src = `img/${lang}-${img.dataset.shot}.jpg`;
+        for (const a of document.querySelectorAll('a[data-shot-link]')) a.href = `img/${lang}-${a.dataset.shotLink}.jpg`;
+        document.getElementById('traps').replaceChildren(...t.traps.map((x) => Object.assign(document.createElement('li'), { textContent: x })));
+        for (const a of document.querySelectorAll('[data-store]')) {
+          const label = a.querySelector('span');
+          if (CONFIG.storeLive) {
+            // Lên Play rồi thì đây là nút chính: xanh lá, phồng nhẹ như nút "Chơi" trong game.
+            a.className = 'btn pulse';
+            a.href = CONFIG.storeUrl;
+            a.removeAttribute('aria-disabled');
+            label.textContent = t.storeLive;
+          } else {
+            label.textContent = t.storeSoon;
+          }
+        }
+        const btn = document.getElementById('lang');
+        document.getElementById('lang-label').textContent = lang === 'vi' ? 'EN' : 'VI';
+        btn.setAttribute('aria-label', t.otherLang);
+        line = 0;
+        say(t.bubble[0]);
+      }
+
+      document.getElementById('lang').addEventListener('click', () => {
+        const next = lang === 'vi' ? 'en' : 'vi';
+        store.set(next);
+        apply(next);
+      });
+
+      const contact = document.getElementById('contact');
+      if (CONFIG.email) {
+        contact.href = `mailto:${CONFIG.email}`;
+        contact.hidden = false;
+      }
+
+      // Người dẫn màn đổi câu mỗi 4,5 giây.
+      setInterval(() => {
+        const lines = T[lang].bubble;
+        line = (line + 1) % lines.length;
+        say(lines[line]);
+      }, 4500);
+
+      // Cửa ra chạy trốn: khi chuột tới gần, khi chạm, và thỉnh thoảng tự chạy như trong menu game.
+      const doorWrap = document.getElementById('door-wrap');
+      const dodge = () => {
+        if (doorWrap.classList.contains('dodge')) return;
+        doorWrap.classList.add('dodge');
+      };
+      doorWrap.addEventListener('animationend', (e) => e.target === doorWrap && doorWrap.classList.remove('dodge'));
+      document.getElementById('door').addEventListener('pointerenter', dodge);
+      document.getElementById('door').addEventListener('click', () => {
+        dodge();
+        say(lang === 'vi' ? 'Tôi đã bảo đừng tin mà.' : 'I told you not to trust me.');
+      });
+      if (!reduced) setInterval(dodge, 5200);
+
+      // Bấm vào hạt đậu thì nó nhảy.
+      const bean = document.querySelector('.bean');
+      bean.addEventListener('click', () => {
+        bean.classList.remove('hop');
+        void bean.offsetWidth;
+        bean.classList.add('hop');
+      });
+      bean.addEventListener('animationend', (e) => e.animationName === 'hop' && bean.classList.remove('hop'));
+
+      apply(lang);
+    </script>
+  </body>
+</html>

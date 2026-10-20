@@ -1,16 +1,19 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Chính sách riêng tư · Đừng Tin Màn Này</title>
+    <title>Privacy Policy · Don't Trust This Level</title>
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg" />
     <style>
       :root {
         --ink: #3a2e39;
         --muted: #6b5f6e;
         --bg: #d9f2ff;
         --card: #ffffff;
-        --accent: #1cb0f6;
+        --line: #d8d4e6;
+        --accent: #0f6f9e;
+        --pick: #1cb0f6;
       }
       @media (prefers-color-scheme: dark) {
         :root {
@@ -18,7 +21,9 @@
           --muted: #b9b1c4;
           --bg: #1b1a2b;
           --card: #2a2840;
+          --line: #45405e;
           --accent: #6ccdfa;
+          --pick: #1899d6;
         }
       }
       body {
@@ -41,42 +46,72 @@
           padding: 8px 16px 24px;
         }
       }
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 0 4px;
+      }
+      nav a { color: var(--accent); font-weight: 600; }
+      .langs { display: flex; gap: 6px; }
+      .langs button {
+        font: 600 15px/1 'Segoe UI', Roboto, Arial, sans-serif;
+        color: var(--ink);
+        background: transparent;
+        border: 2px solid var(--line);
+        border-radius: 999px;
+        padding: 7px 14px;
+        cursor: pointer;
+      }
+      .langs button[aria-pressed='true'] { background: var(--pick); border-color: var(--pick); color: #fff; }
       h1 { font-size: 1.6em; line-height: 1.2; }
       h2 { font-size: 1.15em; margin-top: 1.6em; }
       a { color: var(--accent); }
       .meta { color: var(--muted); }
-      hr { border: 0; border-top: 1px solid var(--muted); opacity: 0.4; margin: 2.5em 0; }
+      /* Không có JavaScript thì hiện cả hai thứ tiếng, ngăn bằng một đường kẻ. */
+      section + section { border-top: 1px solid var(--line); margin-top: 2.5em; }
+      .js section[hidden] { display: none; }
     </style>
   </head>
   <body>
     <main>
-      <!-- Trước khi đăng: thay [TÊN NHÀ PHÁT TRIỂN], [EMAIL] và ngày cập nhật. Đây là mẫu, không phải tư vấn pháp lý. -->
-      <h1>Chính sách riêng tư: Đừng Tin Màn Này</h1>
-      <p class="meta">Cập nhật: 20/10/2026 · Nhà phát triển: [TÊN NHÀ PHÁT TRIỂN] · Liên hệ: [EMAIL]</p>
+      <nav>
+        <a href="./" id="home">← Don't Trust This Level</a>
+        <div class="langs" role="group" aria-label="Language / Ngôn ngữ">
+          <button type="button" data-lang="vi" aria-pressed="false">Tiếng Việt</button>
+          <button type="button" data-lang="en" aria-pressed="false">English</button>
+        </div>
+      </nav>
 
-      <h2>Dữ liệu chúng tôi lưu</h2>
-      <p>Game không yêu cầu tài khoản và không gửi dữ liệu cá nhân về máy chủ của chúng tôi. Tiến độ chơi, số lần chết, cài đặt và năm sinh bạn chọn ở lần mở đầu tiên chỉ được lưu trên thiết bị của bạn và bị xoá khi gỡ game.</p>
+      <!-- Trước khi đăng: thay [TÊN NHÀ PHÁT TRIỂN], [DEVELOPER NAME], [EMAIL] và ngày cập nhật ở cả hai thứ tiếng. Đây là mẫu, không phải tư vấn pháp lý. -->
+      <section id="vi" lang="vi">
+        <h1>Chính sách riêng tư: Đừng Tin Màn Này</h1>
+        <p class="meta">Cập nhật: 20/10/2026 · Nhà phát triển: NTV Play · Liên hệ: laptrinhdeom@gmail.com</p>
 
-      <h2>Quảng cáo</h2>
-      <p>Bản trên điện thoại hiển thị quảng cáo qua Google AdMob. AdMob có thể thu thập mã nhận dạng quảng cáo của thiết bị, địa chỉ IP (để ước lượng vị trí gần đúng), thông tin thiết bị và tương tác với quảng cáo, nhằm hiển thị quảng cáo, đo lường và chống gian lận. Xem cách Google sử dụng dữ liệu: <a href="https://policies.google.com/technologies/partner-sites">policies.google.com/technologies/partner-sites</a>.</p>
+        <h2>Dữ liệu chúng tôi lưu</h2>
+        <p>Game không yêu cầu tài khoản và không gửi dữ liệu cá nhân về máy chủ của chúng tôi. Tiến độ chơi, số lần chết, cài đặt và năm sinh bạn chọn ở lần mở đầu tiên chỉ được lưu trên thiết bị của bạn và bị xoá khi gỡ game.</p>
 
-      <h2>Trẻ em</h2>
-      <p>Lần đầu mở game, chúng tôi hỏi năm sinh. Với người chơi dưới 13 tuổi, game chỉ yêu cầu quảng cáo dành cho trẻ em, không cá nhân hoá, nội dung phù hợp mọi lứa tuổi. Với người dưới 16 tuổi, game không yêu cầu quảng cáo cá nhân hoá ở những nơi luật yêu cầu sự đồng ý của phụ huynh.</p>
+        <h2>Quảng cáo</h2>
+        <p>Bản trên điện thoại hiển thị quảng cáo qua Google AdMob. AdMob có thể thu thập mã nhận dạng quảng cáo của thiết bị, địa chỉ IP (để ước lượng vị trí gần đúng), thông tin thiết bị và tương tác với quảng cáo, nhằm hiển thị quảng cáo, đo lường và chống gian lận. Xem cách Google sử dụng dữ liệu: <a href="https://policies.google.com/technologies/partner-sites?hl=vi">policies.google.com/technologies/partner-sites</a>.</p>
 
-      <h2>Người dùng ở châu Âu, Anh và một số bang của Mỹ</h2>
-      <p>Game hỏi sự đồng ý trước khi hiển thị quảng cáo cá nhân hoá. Bạn có thể đổi lựa chọn bất cứ lúc nào: ở menu, bấm nút hình khiên, chọn "Tuỳ chọn quảng cáo".</p>
+        <h2>Trẻ em</h2>
+        <p>Lần đầu mở game, chúng tôi hỏi năm sinh. Với người chơi dưới 13 tuổi, game chỉ yêu cầu quảng cáo dành cho trẻ em, không cá nhân hoá, nội dung phù hợp mọi lứa tuổi. Với người dưới 16 tuổi, game không yêu cầu quảng cáo cá nhân hoá ở những nơi luật yêu cầu sự đồng ý của phụ huynh.</p>
 
-      <h2>Quyền của bạn</h2>
-      <p>Bạn có thể đặt lại hoặc xoá mã nhận dạng quảng cáo trong cài đặt Android, hoặc gỡ game để xoá toàn bộ dữ liệu lưu trên máy. Mọi câu hỏi xin gửi về [EMAIL].</p>
+        <h2>Người dùng ở châu Âu, Anh và một số bang của Mỹ</h2>
+        <p>Game hỏi sự đồng ý trước khi hiển thị quảng cáo cá nhân hoá. Bạn có thể đổi lựa chọn bất cứ lúc nào: ở menu, bấm nút hình khiên, chọn "Tuỳ chọn quảng cáo".</p>
 
-      <h2>Thay đổi</h2>
-      <p>Khi chính sách thay đổi, chúng tôi cập nhật trang này và ghi ngày cập nhật ở đầu trang.</p>
+        <h2>Quyền của bạn</h2>
+        <p>Bạn có thể đặt lại hoặc xoá mã nhận dạng quảng cáo trong cài đặt Android, hoặc gỡ game để xoá toàn bộ dữ liệu lưu trên máy. Mọi câu hỏi xin gửi về [EMAIL].</p>
 
-      <hr />
+        <h2>Thay đổi</h2>
+        <p>Khi chính sách thay đổi, chúng tôi cập nhật trang này và ghi ngày cập nhật ở đầu trang.</p>
+      </section>
 
-      <h1 lang="en">Privacy Policy: Don't Trust This Level</h1>
-      <div lang="en">
-        <p class="meta">Updated: October 20, 2026 · Developer: [DEVELOPER NAME] · Contact: [EMAIL]</p>
+      <section id="en" lang="en">
+        <h1>Privacy Policy: Don't Trust This Level</h1>
+        <p class="meta">Updated: October 20, 2026 · Developer: NTV Play · Contact: laptrinhdeom@gmail.com</p>
 
         <h2>Data we store</h2>
         <p>The game needs no account and sends no personal data to our servers. Your progress, death count, settings and the birth year you pick on first launch are stored only on your device and are deleted when you uninstall the game.</p>
@@ -95,7 +130,36 @@
 
         <h2>Changes</h2>
         <p>If this policy changes, we will update this page and the date at the top.</p>
-      </div>
+      </section>
     </main>
+
+    <script>
+      // Hiện một thứ tiếng: ?lang=vi|en, rồi lựa chọn đã lưu (dùng chung với trang chính), rồi ngôn ngữ trình duyệt.
+      const store = {
+        get() { try { return localStorage.getItem('ntv.lang'); } catch { return null; } },
+        set(v) { try { localStorage.setItem('ntv.lang', v); } catch {} },
+      };
+      const pick = (v) => (v === 'vi' || v === 'en' ? v : null);
+      const browserLang = (navigator.languages || [navigator.language]).some((l) => /^vi\b/i.test(l || '')) ? 'vi' : 'en';
+      const TITLES = { vi: 'Chính sách riêng tư · Đừng Tin Màn Này', en: "Privacy Policy · Don't Trust This Level" };
+      const HOME = { vi: '← Đừng Tin Màn Này', en: "← Don't Trust This Level" };
+
+      function show(lang) {
+        document.documentElement.lang = lang;
+        document.title = TITLES[lang];
+        document.getElementById('home').textContent = HOME[lang];
+        for (const id of ['vi', 'en']) document.getElementById(id).hidden = id !== lang;
+        for (const b of document.querySelectorAll('[data-lang]')) b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+      }
+
+      document.documentElement.classList.add('js');
+      for (const b of document.querySelectorAll('[data-lang]')) {
+        b.addEventListener('click', () => {
+          store.set(b.dataset.lang);
+          show(b.dataset.lang);
+        });
+      }
+      show(pick(new URLSearchParams(location.search).get('lang')) || pick(store.get()) || browserLang);
+    </script>
   </body>
 </html>

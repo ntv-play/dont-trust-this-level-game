@@ -806,6 +806,7 @@
         for (const el of document.querySelectorAll('[data-i18n-label]')) el.setAttribute('aria-label', t[el.dataset.i18nLabel]);
         for (const img of document.querySelectorAll('img[data-shot]')) img.src = `img/${lang}-${img.dataset.shot}.jpg`;
         for (const a of document.querySelectorAll('a[data-shot-link]')) a.href = `img/${lang}-${a.dataset.shotLink}.jpg`;
+        document.querySelector('a[href^="privacy.html"]').href = `privacy.html?lang=${lang}`;
         document.getElementById('traps').replaceChildren(...t.traps.map((x) => Object.assign(document.createElement('li'), { textContent: x })));
         for (const a of document.querySelectorAll('[data-store]')) {
           const label = a.querySelector('span');
